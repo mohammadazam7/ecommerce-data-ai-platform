@@ -47,5 +47,5 @@ Zip code prefixes are kept as text so leading zeros survive.
   reviews were replaced with the names of Game of Thrones houses by the publisher.
 - `customer_id` changes with every order, so repeat-customer analysis must use
   `customer_unique_id`.
-- Timestamps have no time zone; they are treated as local time in Brazil (UTC-3 for most
-  of the period).
+- Timestamps have no time zone; they are treated as Brasilia time, which was UTC-3 and
+  UTC-2 during the daylight saving periods Brazil still observed from 2016 to 2018.
