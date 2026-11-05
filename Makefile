@@ -26,6 +26,7 @@ audit:
 
 data:
 	commerce download
+	commerce bronze
 
 check: lint typecheck test
 
