@@ -3,7 +3,7 @@
 Each milestone lands on its own branch with tests and is merged when complete. Checked
 items are done.
 
-- [ ] **M1: Foundation and data** (Nov 2 to Nov 5). Package layout, CI, a download
+- [x] **M1: Foundation and data** (Nov 2 to Nov 5). Package layout, CI, a download
       script pinned to a commit of the Olist repository, schema contracts for each
       table, a Parquet lakehouse on DuckDB, and an order event stream replayed in time
       order for incremental loads.
