@@ -22,6 +22,8 @@ defusedxml==0.7.1
     # via py-serializable
 distlib==0.4.4
     # via virtualenv
+duckdb==2.0.0
+    # via commerce-platform (pyproject.toml)
 filelock==4.2.7
     # via
     #   cachecontrol

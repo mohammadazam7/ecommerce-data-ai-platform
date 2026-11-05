@@ -25,7 +25,8 @@ audit:
 	pip-audit --skip-editable
 
 data:
-	commerce download --out data/raw
+	commerce download
+	commerce bronze
 
 check: lint typecheck test
 
