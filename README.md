@@ -56,7 +56,16 @@ flowchart LR
 python -m venv .venv && source .venv/bin/activate
 make install
 make check
+
+commerce download                 # nine Olist files, pinned and checksummed
+commerce bronze                   # validate every table and write the bronze layer
+commerce replay --batches 30      # replay the next 30 days of order events
 ```
+
+`commerce bronze` refuses to write anything if a table breaks its contract. `commerce
+replay` keeps a watermark in `data/lake/stream/order_events/`; run it again to continue,
+or pass `--start` to rerun from an earlier time without duplicating events. See
+[docs/DATA.md](docs/DATA.md) for the source, licence and table quirks.
 
 ## Data and licence
 
