@@ -82,3 +82,22 @@ def test_cli_bronze(landing: Path, tmp_path: Path, capsys: pytest.CaptureFixture
     )
     assert main(args) == 1
     assert "duplicate keys" in capsys.readouterr().out
+
+
+def test_cli_replay(landing: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    lake = tmp_path / "lake"
+    main(
+        [
+            "bronze",
+            "--landing",
+            str(landing),
+            "--lake",
+            str(lake),
+            "--database",
+            str(tmp_path / "w.duckdb"),
+        ]
+    )
+    assert main(["replay", "--lake", str(lake), "--batches", "3"]) == 0
+    out = capsys.readouterr().out
+    assert "watermark" in out
+    assert main(["replay", "--lake", str(lake), "--start", "2017-10-01T00:00:00"]) == 0
