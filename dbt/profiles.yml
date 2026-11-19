@@ -1,0 +1,8 @@
+# The models read the bronze views that `commerce bronze` registers in this DuckDB file.
+commerce:
+  target: duckdb
+  outputs:
+    duckdb:
+      type: duckdb
+      path: "{{ env_var('COMMERCE_DUCKDB', '../data/commerce.duckdb') }}"
+      threads: 4

@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: One row per order with basket totals, payment and delivery against the promised date.
+    config:
+      contract: {enforced: true}
+    columns:
+      - {name: order_id, data_type: varchar, constraints: [{type: not_null}, {type: primary_key}], data_tests: [unique]}
+      - {name: customer_unique_id, data_type: varchar, constraints: [{type: not_null}], data_tests: [{relationships: {arguments: {to: ref('dim_customers'), field: customer_unique_id}}}]}
+      - {name: order_status, data_type: varchar, data_tests: [{accepted_values: {arguments: {values: [created, approved, invoiced, processing, shipped, delivered, canceled, unavailable]}}}]}
+      - {name: purchased_at, data_type: timestamp, constraints: [{type: not_null}]}
+      - {name: purchase_date, data_type: date}
+      - {name: items, data_type: bigint}
+      - {name: sellers, data_type: bigint}
+      - {name: item_value, data_type: double}
+      - {name: freight_value, data_type: double}
+      - {name: order_value, data_type: double}
+      - {name: paid, data_type: double, description: "Sum of payments; null for the one order with no payment row."}
+      - {name: installments, data_type: integer}
+      - {name: main_payment_type, data_type: varchar}
+      - {name: delivered_at, data_type: timestamp}
+      - {name: estimated_delivery_at, data_type: timestamp}
+      - {name: days_to_deliver, data_type: double}
+      - {name: delivered_late, data_type: boolean, description: "Delivered on a later calendar day than promised; null if not delivered."}
+  - name: dim_customers
+    description: One row per person, keyed by customer_unique_id.
+    columns:
+      - name: customer_unique_id
+        data_tests: [unique, not_null]
+      - name: orders
+        data_tests: [not_null]

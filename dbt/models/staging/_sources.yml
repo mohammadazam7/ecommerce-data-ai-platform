@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: bronze
+    description: Contracted Olist tables written by `commerce bronze`, one view per Parquet file.
+    schema: bronze
+    tables:
+      - name: orders
+      - name: order_items
+      - name: order_payments
+      - name: customers
