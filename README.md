@@ -67,6 +67,27 @@ replay` keeps a watermark in `data/lake/stream/order_events/`; run it again to c
 or pass `--start` to rerun from an earlier time without duplicating events. See
 [docs/DATA.md](docs/DATA.md) for the source, licence and table quirks.
 
+## Order and customer marts
+
+`dbt/` builds staging views over bronze and two marts in DuckDB:
+
+- `marts.fct_orders`, one row per order: basket size, item and freight value, what was
+  paid, delivery time and whether it arrived on a later calendar day than promised.
+- `marts.dim_customers`, one row per person. Olist issues a new `customer_id` for every
+  order, so a person is `customer_unique_id`; joining on `customer_id` would count every
+  repeat buyer as a new customer.
+
+```bash
+cd dbt && dbt build --profiles-dir .
+```
+
+On the full data set (pinned commit; models and tests run in 1.4 seconds on 2 vCPUs of
+an Intel Xeon at 2.10GHz): 99,441 orders from 96,096 people, of whom 2,997 ordered more
+than once. 96,476 orders have a delivery date and 6,535 of those (6.8%) arrived after
+the promised day. Payments match items plus freight to the cent for every order with
+items except 450 (0.5%), and 775 orders have no items at all; a dbt test fails the build
+if the mismatch passes 1%, which is what a join fanning out would look like.
+
 ## Data and licence
 
 Code is released under the MIT licence. The Olist data set is published by Olist under
