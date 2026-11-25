@@ -5,6 +5,12 @@ All notable changes are recorded here. The format follows
 
 ## [Unreleased]
 
+### Added
+- dbt project over bronze: staging views, `marts.fct_orders` (one row per order with
+  basket, payment and delivery against the promised day) and `marts.dim_customers`
+  (one row per `customer_unique_id`), with a contract, data tests and a payment
+  reconciliation check.
+
 ## [0.1.0] - 2026-11-05
 
 ### Added
