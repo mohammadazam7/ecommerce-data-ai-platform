@@ -16,3 +16,20 @@ models:
     columns:
       - name: customer_id
         data_tests: [unique, not_null]
+  - name: stg_sellers
+    columns:
+      - name: seller_id
+        data_tests: [unique, not_null]
+  - name: stg_products
+    columns:
+      - name: product_id
+        description: Unique here only if the translation table has one row per category.
+        data_tests: [unique, not_null]
+  - name: stg_order_reviews
+    data_tests:
+      - unique_combination:
+          arguments:
+            columns: [review_id, order_id]
+    columns:
+      - name: score
+        data_tests: [not_null, {accepted_values: {arguments: {values: [1, 2, 3, 4, 5], quote: false}}}]
