@@ -30,3 +30,40 @@ models:
         data_tests: [unique, not_null]
       - name: orders
         data_tests: [not_null]
+  - name: fct_order_items
+    description: One row per item in an order, with buyer, category and seller state joined in.
+    data_tests:
+      - unique_combination:
+          arguments:
+            columns: [order_id, order_item_id]
+    columns:
+      - name: order_id
+        data_tests: [not_null, {relationships: {arguments: {to: ref('fct_orders'), field: order_id}}}]
+      - name: product_id
+        data_tests: [not_null, {relationships: {arguments: {to: ref('dim_products'), field: product_id}}}]
+      - name: seller_id
+        data_tests: [not_null, {relationships: {arguments: {to: ref('dim_sellers'), field: seller_id}}}]
+  - name: fct_order_reviews
+    description: One row per reviewed order; the most recently answered review stands for the order.
+    columns:
+      - name: order_id
+        data_tests: [unique, not_null, {relationships: {arguments: {to: ref('fct_orders'), field: order_id}}}]
+      - name: score
+        data_tests: [not_null]
+      - name: reviews
+        description: How many reviews the order received.
+        data_tests: [not_null]
+  - name: dim_products
+    description: One row per product with category in English and what it sold.
+    columns:
+      - name: product_id
+        data_tests: [unique, not_null]
+      - name: items_sold
+        data_tests: [not_null]
+  - name: dim_sellers
+    description: One row per seller with sales, share of orders delivered late and review score on single-seller orders.
+    columns:
+      - name: seller_id
+        data_tests: [unique, not_null]
+      - name: orders
+        data_tests: [not_null]

@@ -67,26 +67,41 @@ replay` keeps a watermark in `data/lake/stream/order_events/`; run it again to c
 or pass `--start` to rerun from an earlier time without duplicating events. See
 [docs/DATA.md](docs/DATA.md) for the source, licence and table quirks.
 
-## Order and customer marts
+## The marts
 
-`dbt/` builds staging views over bronze and two marts in DuckDB:
+`dbt/` builds staging views over bronze and six marts in DuckDB:
 
 - `marts.fct_orders`, one row per order: basket size, item and freight value, what was
   paid, delivery time and whether it arrived on a later calendar day than promised.
 - `marts.dim_customers`, one row per person. Olist issues a new `customer_id` for every
   order, so a person is `customer_unique_id`; joining on `customer_id` would count every
   repeat buyer as a new customer.
+- `marts.fct_order_items`, one row per item, with buyer, category in English and the
+  seller's state joined in.
+- `marts.fct_order_reviews`, one row per reviewed order. In the source an order can be
+  reviewed more than once and one review can cover several orders, so the most recently
+  answered review stands for the order and a count is kept.
+- `marts.dim_products` and `marts.dim_sellers`, with what each sold. Items of canceled
+  and unavailable orders are not sales. A seller's review score uses only orders where
+  that seller was the only one, because a review belongs to an order, not to a seller.
 
 ```bash
 cd dbt && dbt build --profiles-dir .
 ```
 
-On the full data set (pinned commit; models and tests run in 1.4 seconds on 2 vCPUs of
-an Intel Xeon at 2.10GHz): 99,441 orders from 96,096 people, of whom 2,997 ordered more
+On the full data set (pinned commit; 13 models and 40 tests run in 3.2 seconds on 2 vCPUs
+of an Intel Xeon at 2.80GHz): 99,441 orders from 96,096 people, of whom 2,997 ordered more
 than once. 96,476 orders have a delivery date and 6,535 of those (6.8%) arrived after
 the promised day. Payments match items plus freight to the cent for every order with
 items except 450 (0.5%), and 775 orders have no items at all; a dbt test fails the build
 if the mismatch passes 1%, which is what a join fanning out would look like.
+
+The same run gives 112,650 items, 32,951 products (222 of them never sold, 610 without a
+category) and 3,095 sellers. 98,673 orders have a review and 547 of those were reviewed
+more than once. Reviewed orders that arrived on time average 4.29 stars and those that
+arrived late 2.27. That is a description, not an effect: late orders differ from on-time
+ones in other ways too (distance, category, season), and separating those is the causal
+study in milestone 3.
 
 ## Data and licence
 

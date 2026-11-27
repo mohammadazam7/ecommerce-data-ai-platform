@@ -6,6 +6,10 @@ All notable changes are recorded here. The format follows
 ## [Unreleased]
 
 ### Added
+- Four more marts: `fct_order_items`, `fct_order_reviews` (one row per reviewed order),
+  `dim_products` and `dim_sellers`, with staging models for sellers, products and
+  reviews, relationship tests between the marts and a check that item totals match
+  order totals.
 - dbt project over bronze: staging views, `marts.fct_orders` (one row per order with
   basket, payment and delivery against the promised day) and `marts.dim_customers`
   (one row per `customer_unique_id`), with a contract, data tests and a payment

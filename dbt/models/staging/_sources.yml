@@ -9,3 +9,7 @@ sources:
       - name: order_items
       - name: order_payments
       - name: customers
+      - name: sellers
+      - name: products
+      - name: order_reviews
+      - name: category_translation
