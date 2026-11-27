@@ -9,7 +9,8 @@ items are done.
       order for incremental loads.
 - [ ] **M2: Data models and orchestration** (Nov 6 to Nov 10). dbt marts for orders,
       customers, sellers, products, reviews and deliveries in a star schema, with tests
-      and contracts, orchestrated as an asset graph with data quality checks.
+      and contracts (done), orchestrated as an asset graph with data quality checks
+      (not yet).
 - [ ] **M3: Customer analytics and causal study** (Nov 11 to Nov 22). Cohort
       retention, RFM segmentation, customer lifetime value, and an estimate of how late
       deliveries change review scores with the assumptions stated.
